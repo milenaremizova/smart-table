@@ -32,6 +32,7 @@ export const initPagination = (
           page = pageCount;
           break; // переход на последнюю страницу
       }
+      state.page = page;
 
     // @todo: #2.4 — получить список видимых страниц и вывести их
     const visiblePages = getPages(page, pageCount, 5);
