@@ -49,21 +49,6 @@ function render(action) {
   result = applySorting(result, state, action);
   result = applyPagination(result, state, action);
 
-  console.log('=== ОТЛАДКА ПОИСКА ===');
-console.log('Поисковый запрос:', state.search);
-console.log('Данные ДО поиска:', result.length, 'строк');
-result = applySearching(result, state, action);
-console.log('Данные ПОСЛЕ поиска:', result.length, 'строк — должны быть 0!');
-
-console.log('Фильтрация:', state.filter); // если есть
-result = applyFiltering(result, state, action);
-console.log('После фильтрации:', result.length);
-
-result = applySorting(result, state, action);
-console.log('После сортировки:', result.length);
-
-result = applyPagination(result, state, action);
-console.log('Финальные данные:', result.length, 'строк');
 
 
   sampleTable.render(result);
