@@ -21,18 +21,15 @@ const { data, ...indexes } = initData(sourceData);
  * @returns {Object}
  */
 function collectState() {
-  const state = processFormData(new FormData(sampleTable.container));
+    const state = processFormData(new FormData(sampleTable.container));
   const rowsPerPage = parseInt(state.rowsPerPage); // приведём количество страниц к числу
   const page = parseInt(state.page ?? 1); // номер страницы по умолчанию 1 и тоже число
-  const totalFrom = state.totalFrom ? parseFloat(state.totalFrom) : undefined;
-  const totalTo = state.totalTo ? parseFloat(state.totalTo) : undefined;
-  const total = [totalFrom, totalTo];
 
   return {
+    // расширьте существующий return вот так
     ...state,
     rowsPerPage,
     page,
-    total,
   };
 }
 
@@ -75,6 +72,7 @@ const applyPagination = initPagination(
     return el;
   },
 );
+
 const applySorting = initSorting([
   // Нам нужно передать сюда массив элементов, которые вызывают сортировку, чтобы изменять их визуальное представление
   sampleTable.header.elements.sortByDate,
@@ -87,8 +85,8 @@ const applyFiltering = initFiltering(sampleTable.filter.elements, {
 });
 
 const applySearching = initSearching(sampleTable.search.elements, {
-    field: "search"
-})
+  field: "search",
+});
 
 const appRoot = document.querySelector("#app");
 appRoot.appendChild(sampleTable.container);
