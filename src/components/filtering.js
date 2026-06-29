@@ -1,6 +1,7 @@
 import { createComparison, defaultRules } from "../lib/compare.js";
 
 // @todo: #4.3 — настроить компаратор
+const compare = createComparison(defaultRules);
 
 export function initFiltering(elements, indexes) {
   // @todo: #4.1 — заполнить выпадающие списки опциями
@@ -23,29 +24,31 @@ export function initFiltering(elements, indexes) {
     });
 
   return (data, state, action) => {
-    // @todo: #4.2 — обработать очистку поля
-    if (action && action.name === "clear") {
-      const button = action.element; // элемент кнопки, которая была нажата
-      const parent = button.parentElement; // родительский элемент кнопки
+  // @todo: #4.2 — обработать очистку поля
+  if (action && action.name === "clear" && action.element) {
+    const button = action.element;
+    const parent = button.parentElement;
+    const input = parent.querySelector("input");
 
-      // Ищем input в родительском элементе — предполагаем, что он где‑то рядом
-      const input = parent.querySelector("input");
+    if (input) {
+      // Очищаем значение в поле ввода
+      input.value = "";
 
-      if (input) {
-        // 1. Очищаем значение в интерфейсе (в поле ввода)
-        input.value = "";
+      // Получаем имя поля из атрибута data-field
+      const fieldName = button.getAttribute("data-field");
 
-        // 2. Получаем имя поля из атрибута data-field кнопки
-        const fieldName = button.getAttribute("data-field");
-
-        // 3. Очищаем соответствующее поле в состоянии (state)
-        if (fieldName) {
-          state[fieldName] = "";
-        }
+      // Очищаем соответствующее поле в состоянии
+      if (fieldName) {
+        state[fieldName] = "";
       }
     }
 
-    // @todo: #4.5 — отфильтровать данные используя компаратор
+    // Возвращаем все данные после очистки
     return data;
-  };
+  }
+
+  // @todo: #4.5 — отфильтровать данные используя компаратор
+  return data.filter((row) => compare(row, state));
+};
+
 }
